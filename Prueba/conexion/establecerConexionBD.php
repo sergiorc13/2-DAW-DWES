@@ -164,7 +164,7 @@ function buscarLibros($mysqli, $nombreLibro) {
 
         echo "</table>";
     } else {
-        echo "No se encontraron libros que coincidan con la búsqueda.";
+        echo "<h3 class='resultado-prestamo'>No se encontraron libros que coincidan con la búsqueda. Prueba otra cosa.</h3>";
     }
 
     mysqli_stmt_close($stmt);
@@ -228,18 +228,19 @@ function mostrarUsuarios($mysqli) {
     $result = mysqli_query($mysqli, $sql);
 
     if (mysqli_num_rows($result) > 0) {
-        echo "<table class='libros-table'>"; // Puedes agregar una clase CSS para dar estilo a la tabla de usuarios
-        echo "<tr><th>ID</th><th>Nombre</th><th>Apellido</th><th>Apellido2</th><th>Correo Electrónico</th><th>Nombre de Usuario</th><th>Rol</th></tr>";
+        echo "<table class='tabla-usuarios'>"; // Puedes agregar una clase CSS para dar estilo a la tabla de usuarios
+        echo "<tr><th>ID</th><th>Nombre</th><th>Apellido</th><th>Apellido2</th><th>Correo Electrónico</th><th>Nombre de Usuario</th><th>Rol</th><th>Modificar</th></tr>";
 
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<tr>";
             echo "<td>" . $row["ID"] . "</td>";
             echo "<td>" . $row["Nombre"] . "</td>";
             echo "<td>" . $row["Apellido"] . "</td>";
-            echo "<td>" . $row["Apellido"] . "</td>";
+            echo "<td>" . $row["Apellido2"] . "</td>";
             echo "<td>" . $row["Correo_Electronico"] . "</td>";
             echo "<td>" . $row["Nombre_Usuario"] . "</td>";
             echo "<td>" . $row["Rol"] . "</td>";
+            echo "<td><a href='?ruta=modificarusuario&ID=" . $row["ID"] . "' class='boton-modificar'>Modificar</a></td>";
             echo "</tr>";
         }
 

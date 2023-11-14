@@ -1,8 +1,8 @@
 <div>
-    <a href="?ruta=perfil" class = "boton-volver">Volver</a>
+    <a href="?ruta=administracion" class = "boton-volver">Volver</a>
 </div>
 <div>
-<br> <p class = "usuarios">Estos son todos los usuarios de la aplicación</p><br> 
+<br> <br><p class = "usuarios">Estos son todos los usuarios que están registrados en nuestra aplicación:</p>
 </div>
 
     <section  class ="section-usuarios">
