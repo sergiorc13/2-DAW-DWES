@@ -480,16 +480,6 @@ a.logout-link {
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.section-usuarios {
-    background-color: #0f06b3;
-    border-radius: 10%;
-    padding: 80px;
-    max-width: 600px;
-    text-align: center;
-    display: flex; /* Utilizamos display flex para centrar horizontalmente */
-    justify-content: center; /* Centra horizontalmente el contenido */
-    align-items: center; /* Centra verticalmente el contenido */
-}
 
 .imagen-libro {
     max-width: 100px;  /* Establece el ancho máximo de la imagen */
@@ -610,8 +600,7 @@ a.logout-link {
 
 /* Estilos específicos para el enlace de devolución */
 .boton-devolver.devolver-link {
-    display: flex;
-    
+    display: flex;   
     align-items: center;
     justify-content: center;
     background-color: rgb(104, 51, 51);
@@ -631,3 +620,65 @@ a.logout-link {
     transform: scale(1.1);
 }
 
+
+
+/* Estilos para la tabla de usuarios */
+.tabla-usuarios {
+    width: 90px;
+    border-collapse: collapse;
+    margin-top: 20px; /* Espacio entre la sección y la tabla */
+}
+
+.tabla-usuarios th, .tabla-usuarios td {
+    border: 1px solid #aeacac;
+    padding: 8px;
+    text-align: center; /* Centra horizontalmente el contenido en las celdas */
+    vertical-align: middle; /* Centra verticalmente el contenido en las celdas */
+}
+
+.tabla-usuarios th {
+    background-color: rgb(3, 38, 14);
+    color: white;
+}
+
+.tabla-usuarios tr{
+    background-color: #f2f2f2;
+}
+
+
+/* Estilos para la sección de usuarios */
+.section-usuarios {
+    background-color: #000000;
+    border-radius: 10px;
+    padding: 20px; /* Reduje el padding para que se vea más equilibrado */
+    max-width: 800px;
+    margin: 0 auto; /* Centra horizontalmente la sección */
+    text-align: center;
+    display: flex;
+    flex-direction: column; /* Alinea los elementos verticalmente */
+    align-items: center; /* Centra horizontalmente los elementos */
+}
+
+/* Estilos adicionales para mejorar la legibilidad */
+.section-usuarios h2 {
+    color: #fff;
+}
+
+.section-usuarios p {
+    color: #ddd;
+}
+
+.boton-modificar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color:rgb(3, 97, 31);
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.boton-modificar:hover{
+    background-color: #1e7a21;
+}

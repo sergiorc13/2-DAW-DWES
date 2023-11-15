@@ -18,4 +18,3 @@
     </section>
     
 
-<?php include_once "estructuraWeb/pie.inc.php"; ?>

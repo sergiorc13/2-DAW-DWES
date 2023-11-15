@@ -3,7 +3,5 @@
 </div>
 
 <?php
-
 echo "<h3 class='resultado-prestamo'>hola</h3>";
-
 ?>

@@ -220,10 +220,10 @@ function cambiarContrasena($mysqli, $nombreUsuario, $contrasenaActual, $nuevaCon
 }
 
 
-//Funcion para mostrar todos los usuarios de la base de datos y sus datos 
+// Función para mostrar todos los usuarios de la base de datos y sus datos
 function mostrarUsuarios($mysqli) {
-    // Sentencia SQL para seleccionar todos los usuarios de la base de datos
-    $sql = "SELECT * FROM usuarios";
+    // Sentencia SQL para seleccionar todos los usuarios no borrados virtualmente de la base de datos
+    $sql = "SELECT * FROM usuarios WHERE Borrado = FALSE";
 
     $result = mysqli_query($mysqli, $sql);
 
@@ -240,7 +240,10 @@ function mostrarUsuarios($mysqli) {
             echo "<td>" . $row["Correo_Electronico"] . "</td>";
             echo "<td>" . $row["Nombre_Usuario"] . "</td>";
             echo "<td>" . $row["Rol"] . "</td>";
-            echo "<td><a href='?ruta=modificarusuario&ID=" . $row["ID"] . "' class='boton-modificar'>Modificar</a></td>";
+            echo "<td>
+                    <a href='?ruta=modificarusuario&ID=" . $row["ID"] . "' class='boton-modificar'>Modificar</a>
+                    <a href='?ruta=borrarusuario&ID=" . $row["ID"] . "' class='boton-modificar'>Borrar</a>
+                  </td>";
             echo "</tr>";
         }
 
@@ -249,6 +252,7 @@ function mostrarUsuarios($mysqli) {
         echo "No se encontraron usuarios en la base de datos.";
     }
 }
+
 
 
 
@@ -399,6 +403,23 @@ function devolverLibro($mysqli, $idUsuario, $isbn) {
     } else {
         echo "El libro no existe.";
     }
+}
+
+//Funcion para borrar usuarios de manera virtual
+function borrarUsuario($mysqli, $idUsuario) {
+    // Marcar un usuario como borrado (virtualmente)
+    $sql = "UPDATE usuarios SET Borrado = TRUE WHERE ID = ?";
+
+    $stmt = mysqli_prepare($mysqli, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $idUsuario);
+
+    if (mysqli_stmt_execute($stmt)) {
+        return true; // Borrado virtual exitoso
+    } else {
+        return false; // Error al marcar el usuario como borrado
+    }
+
+    mysqli_stmt_close($stmt);
 }
 
 
