@@ -257,11 +257,11 @@ function mostrarUsuarios($mysqli) {
 
 
 function prestarLibro($mysqli, $ID_Usuario, $ID_Libro) {
-    // Obtener la fecha actual
-    $inicioPrestamo = date("Y-m-d");
+    // Obtener la fecha y hora actual
+    $inicioPrestamo = date("Y-m-d H:i:s");
 
     // Calcular la fecha de fin de préstamo (30 días después)
-    $finPrestamo = date("Y-m-d", strtotime($inicioPrestamo . ' + 30 days'));
+    $finPrestamo = date("Y-m-d H:i:s", strtotime($inicioPrestamo . ' + 30 days'));
 
     // Sentencia SQL para insertar una fila en la tabla prestamo
     $sql = "INSERT INTO prestamo (ID_Usuario, ID_Libro, Inicio_Prestamo, Fin_Prestamo) VALUES (?, ?, ?, ?)";
@@ -270,13 +270,16 @@ function prestarLibro($mysqli, $ID_Usuario, $ID_Libro) {
     mysqli_stmt_bind_param($stmt, "iiss", $ID_Usuario, $ID_Libro, $inicioPrestamo, $finPrestamo);
 
     if (mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
         return true; // Préstamo exitoso
     } else {
+        mysqli_stmt_close($stmt);
         return false; // Error al prestar el libro
     }
-
-    mysqli_stmt_close($stmt);
 }
+
+
+
 
 function obtenerIdUsuario($mysqli, $nombreUsuario) {
     $sql = "SELECT ID FROM usuarios WHERE Nombre_Usuario = ?";
@@ -298,7 +301,7 @@ function librosReservados($mysqli, $nombreUsuario) {
     // Verificar si se pudo obtener el ID del usuario
     if ($idUsuario !== null) {
         // Sentencia SQL para seleccionar los libros reservados para el usuario
-        $sql = "SELECT l.ISBN, l.Titulo, l.Autor, l.Editorial, l.URL
+        $sql = "SELECT l.ISBN, l.Titulo, l.Autor, l.Editorial, l.URL, p.Inicio_Prestamo, p.Fin_Prestamo
                 FROM prestamo p
                 INNER JOIN libros l ON p.ID_Libro = l.ID
                 WHERE p.ID_Usuario = ?";
@@ -309,8 +312,8 @@ function librosReservados($mysqli, $nombreUsuario) {
         $result = mysqli_stmt_get_result($stmt);
 
         if (mysqli_num_rows($result) > 0) {
-            echo "<table class='libros-table'>";
-            echo "<tr><th>ISBN</th><th>Título</th><th>Autor</th><th>Editorial</th><th>Portada</th><th>Devolver</th></tr>";
+            echo "<table class='libros-reservados'>";
+            echo "<tr><th>ISBN</th><th>Título</th><th>Autor</th><th>Editorial</th><th>Portada</th><th>Inicio Prestamo</th><th>Fin Prestamo</th><th>Devolver</th></tr>";
 
             while ($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>";
@@ -319,9 +322,11 @@ function librosReservados($mysqli, $nombreUsuario) {
                 echo "<td>" . $row["Autor"] . "</td>";
                 echo "<td>" . $row["Editorial"] . "</td>";
                 echo "<td><img src='./img/{$row['URL']}' class='imagen-libro'></td>";
-                echo "<td><a href='?ruta=devolver&ISBN=" . $row["ISBN"] . "' class='boton-devolver devolver-link'>Devolver</a></td>";
+                echo "<td>" . $row["Inicio_Prestamo"] . "</td>";
+                echo "<td>" . $row["Fin_Prestamo"] . "</td>";
+                echo "<td><a href='?ruta=devolver&ISBN=" . $row["ISBN"] . "' class='boton-devolver devolver-link'>Devolver libro</a></td>";
                 echo "</tr>";
-            }            
+            }
 
             echo "</table>";
         } else {
@@ -333,6 +338,7 @@ function librosReservados($mysqli, $nombreUsuario) {
         echo "Error al obtener el ID de usuario. Por favor, inicia sesión.";
     }
 }
+
 
 
 function reservarLibro($mysqli, $idUsuario, $idLibro) {
