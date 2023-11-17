@@ -68,10 +68,10 @@ if (isset($_SESSION["usuario"])) {
     }
 }
 
-
+// Función para mostrar libros que no han sido borrados virtualmente
 function mostrarLibros($mysqli) {
-    // Sentencia SQL para seleccionar todos los libros de la base de datos
-    $sql = "SELECT ISBN, Titulo, Autor, Editorial, URL FROM libros"; // Reemplaza "nombre_de_la_tabla" por el nombre real de tu tabla de libros
+    // Sentencia SQL para seleccionar todos los libros no borrados virtualmente de la base de datos
+    $sql = "SELECT ISBN, Titulo, Autor, Editorial, URL FROM libros WHERE Borrado = FALSE"; // Reemplaza "nombre_de_la_tabla" por el nombre real de tu tabla de libros
 
     $result = mysqli_query($mysqli, $sql);
 
@@ -86,7 +86,7 @@ function mostrarLibros($mysqli) {
             echo "<td>" . $row["Autor"] . "</td>";
             echo "<td>" . $row["Editorial"] . "</td>";
             echo "<td><img src='./img/{$row['URL']}' class='imagen-libro'></td>";
-            echo "<td><a href='?ruta=libro&ISBN=" . $row["ISBN"] . "' name = 'informacion-libro'>Reservar</a></td>";
+            echo "<td><a href='?ruta=libro&ISBN=" . $row["ISBN"] . "' name='informacion-libro'>Reservar</a></td>";
            
             echo "</tr>";
         }
@@ -96,6 +96,7 @@ function mostrarLibros($mysqli) {
         echo "No se encontraron libros en la base de datos.";
     }
 }
+
 
 
 // Función para obtener los datos de un libro a partir de su ISBN
@@ -294,17 +295,18 @@ function obtenerIdUsuario($mysqli, $nombreUsuario) {
     return $idUsuario;
 }
 
+
 function librosReservados($mysqli, $nombreUsuario) {
     // Obtener el ID del usuario
     $idUsuario = obtenerIdUsuario($mysqli, $nombreUsuario);
 
     // Verificar si se pudo obtener el ID del usuario
     if ($idUsuario !== null) {
-        // Sentencia SQL para seleccionar los libros reservados para el usuario
+        // Sentencia SQL para seleccionar los libros reservados para el usuario que no están borrados virtualmente
         $sql = "SELECT l.ISBN, l.Titulo, l.Autor, l.Editorial, l.URL, p.Inicio_Prestamo, p.Fin_Prestamo
                 FROM prestamo p
                 INNER JOIN libros l ON p.ID_Libro = l.ID
-                WHERE p.ID_Usuario = ?";
+                WHERE p.ID_Usuario = ? AND l.Borrado = FALSE";
 
         $stmt = mysqli_prepare($mysqli, $sql);
         mysqli_stmt_bind_param($stmt, "i", $idUsuario);
@@ -428,6 +430,52 @@ function borrarUsuario($mysqli, $idUsuario) {
     mysqli_stmt_close($stmt);
 }
 
+function modificarLibros($mysqli) {
+    // Sentencia SQL para seleccionar todos los libros no borrados virtualmente de la base de datos
+    $sql = "SELECT ISBN, Titulo, Autor, Editorial, URL FROM libros WHERE Borrado = FALSE";
+
+    $result = mysqli_query($mysqli, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        echo "<table class='libros-table'>"; // Agrega la clase 'libros-table' a la tabla
+        echo "<tr><th>ISBN</th><th>Título</th><th>Autor</th><th>Editorial</th><th>Portada</th><th>Borrar</th></tr>";
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr>";
+            echo "<td>" . $row["ISBN"] . "</td>";
+            echo "<td>" . $row["Titulo"] . "</td>";
+            echo "<td>" . $row["Autor"] . "</td>";
+            echo "<td>" . $row["Editorial"] . "</td>";
+            echo "<td><img src='./img/{$row['URL']}' class='imagen-libro'></td>";
+            echo "<td>
+                    <a href='?ruta=borrarLibros&ISBN=" . $row["ISBN"] . "' class='boton-modificar'>Borrar</a>
+                  </td>";
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    } else {
+        echo "No se encontraron libros en la base de datos.";
+    }
+}
+
+
+// Función para borrar libros de manera virtual
+function borrarLibros($mysqli, $ISBN) {
+    // Marcar un libro como borrado (virtualmente)
+    $sql = "UPDATE libros SET Borrado = TRUE WHERE ISBN = ?";
+
+    $stmt = mysqli_prepare($mysqli, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $ISBN);
+
+    if (mysqli_stmt_execute($stmt)) {
+        return true; // Borrado virtual exitoso
+    } else {
+        return false; // Error al marcar el libro como borrado
+    }
+
+    mysqli_stmt_close($stmt);
+}
 
 
 
