@@ -22,20 +22,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Mueve el archivo temporal a la carpeta de destino
     if (move_uploaded_file($archivoTemporal, $carpetaDestino)) {
-        $URL = $carpetaDestino;
+        // Extraer solo el nombre del archivo
+        $nombreArchivo = basename($nombreArchivo);
 
         // Llama a la función para agregar el libro a la base de datos
-        $resultado = agregarLibro($mysqli, $ISBN, $Titulo, $Autor, $Editorial, $Sinopsis, $URL);
+        $resultado = agregarLibro($mysqli, $ISBN, $Titulo, $Autor, $Editorial, $Sinopsis, $nombreArchivo);
 
         // Imprime el resultado
         echo $resultado;
     } else {
         echo "Error al subir la imagen.";
     }
-
 }
 
 mysqli_close($mysqli);
+
 ?>
 
 
