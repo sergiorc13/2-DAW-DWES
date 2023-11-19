@@ -230,7 +230,7 @@ function mostrarUsuarios($mysqli) {
 
     if (mysqli_num_rows($result) > 0) {
         echo "<table class='tabla-usuarios'>"; // Puedes agregar una clase CSS para dar estilo a la tabla de usuarios
-        echo "<tr><th>ID</th><th>Nombre</th><th>Apellido</th><th>Apellido2</th><th>Correo Electrónico</th><th>Nombre de Usuario</th><th>Rol</th><th>Modificar</th></tr>";
+        echo "<tr><th>ID</th><th>Nombre</th><th>Apellido</th><th>Apellido2</th><th>Correo Electrónico</th><th>Nombre de Usuario</th><th>Rol</th><th>Borrar</th></tr>";
 
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<tr>";
@@ -241,10 +241,10 @@ function mostrarUsuarios($mysqli) {
             echo "<td>" . $row["Correo_Electronico"] . "</td>";
             echo "<td>" . $row["Nombre_Usuario"] . "</td>";
             echo "<td>" . $row["Rol"] . "</td>";
-            echo "<td>
-                    <a href='?ruta=modificarusuario&ID=" . $row["ID"] . "' class='boton-modificar'>Modificar</a>
-                    <a href='?ruta=borrarusuario&ID=" . $row["ID"] . "' class='boton-modificar'>Borrar</a>
-                  </td>";
+            echo "<td><a href='?ruta=borrarusuario&ID=" . $row["ID"] . "' class='boton-modificar'>Borrar</a></td>";
+            
+            //echo "<a href='?ruta=modificarusuario&ID=" . $row["ID"] . "' class='boton-modificar'>Modificar</a>";
+                    
             echo "</tr>";
         }
 
@@ -279,6 +279,26 @@ function prestarLibro($mysqli, $ID_Usuario, $ID_Libro) {
     }
 }
 
+
+// Función para eliminar préstamos terminados 
+function eliminarPrestamosVencidos($mysqli) {
+    // Obtener la fecha y hora actual
+    $fechaActual = date("Y-m-d H:i:s");
+
+    // Sentencia SQL para eliminar préstamos vencidos
+    $sql = "DELETE FROM prestamo WHERE Fin_Prestamo < ?";
+
+    $stmt = mysqli_prepare($mysqli, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $fechaActual);
+
+    if (mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+        return true; // Eliminación exitosa
+    } else {
+        mysqli_stmt_close($stmt);
+        return false; // Error al eliminar préstamos vencidos
+    }
+}
 
 
 
@@ -476,6 +496,27 @@ function borrarLibros($mysqli, $ISBN) {
 
     mysqli_stmt_close($stmt);
 }
+
+
+
+//Funcion para agregar libros a la base de datos
+function agregarLibro($mysqli, $ISBN, $Titulo, $Autor, $Editorial, $Sinopsis, $URL) {
+    // Sentencia SQL para insertar una fila en la tabla libros
+    $sql = "INSERT INTO libros (ISBN, Titulo, Autor, Editorial, SINOPSIS, URL) VALUES (?, ?, ?, ?, ?, ?)";
+
+    $stmt = mysqli_prepare($mysqli, $sql);
+    mysqli_stmt_bind_param($stmt, "ssssss", $ISBN, $Titulo, $Autor, $Editorial, $Sinopsis, $URL);
+
+    if (mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+        return "Libro añadido correctamente a la base de datos.";
+    } else {
+        $error = mysqli_error($mysqli);
+        mysqli_stmt_close($stmt);
+        return "Error al añadir el libro a la base de datos. Detalles: " . $error;
+    }
+}
+
 
 
 

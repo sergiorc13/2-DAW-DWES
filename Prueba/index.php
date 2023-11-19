@@ -10,7 +10,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proyecto: Biblioteca</title>
-    <link rel="stylesheet" type="text/css" href="css/estilos.css">
+    <link rel="stylesheet" type="text/css" href="css/estilo.css">
 </head>
 <body>
 <?php include_once "estructuraWeb/cabecera.inc.php" ?>
@@ -111,12 +111,6 @@ session_start();
         if(isset($_GET["ruta"]) && $_GET["ruta"] == "administrarLibros") {
             
             include_once "estructuraWeb/administrarLibros.inc.php";
-            exit; // Detener la ejecución para que no se muestren los botones)
-        }
-
-        if(isset($_GET["ruta"]) && $_GET["ruta"] == "modificarLibros") {
-            
-            include_once "estructuraWeb/modificarLibros.inc.php";
             exit; // Detener la ejecución para que no se muestren los botones)
         }
         
