@@ -5,6 +5,7 @@
 <div class="botones-administracion">
   
     <a href="?ruta=usuarios">Administrar Usuarios</a>
-    <a href="?ruta=administrarLibros"> Administrar Libros</a><br>
+    <a href="?ruta=administrarLibros"> Administrar Libros</a>
+    <a href="?ruta=administrarPrestamos">Administrar Préstamos</a><br>
 </div>
 

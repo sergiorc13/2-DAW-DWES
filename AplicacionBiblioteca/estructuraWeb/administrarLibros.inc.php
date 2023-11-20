@@ -3,7 +3,8 @@
 </div>
 <div>
     <a href="?ruta=anadirLibros" class="boton-anadir-libros">Añadir libros</a>
-</div><br><br><br><br><br><br>
+</div><br>
+<p class = "usuarios">Estos son todos los libros que hay en nuestra aplicación:</p>
 
 <div>
 <?php

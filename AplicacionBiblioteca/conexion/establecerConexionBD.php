@@ -14,7 +14,7 @@ if (!$mysqli) {
 
 // Realiza operaciones en la base de datos aquí
 function usuarioExiste($mysqli, $nombreUsuario) {
-    $sql = "SELECT COUNT(*) as total FROM usuarios WHERE Nombre_Usuario = ?";
+    $sql = "SELECT COUNT(*) as total FROM usuarios WHERE Nombre_Usuario = ? AND Borrado = FALSE";
 
     $stmt = mysqli_prepare($mysqli, $sql);
     mysqli_stmt_bind_param($stmt, "s", $nombreUsuario);
@@ -509,13 +509,60 @@ function agregarLibro($mysqli, $ISBN, $Titulo, $Autor, $Editorial, $Sinopsis, $U
 
     if (mysqli_stmt_execute($stmt)) {
         mysqli_stmt_close($stmt);
-        return "Libro añadido correctamente a la base de datos.";
+        return "<h3 class='resultado-prestamo'>Libro añadido correctamente a la base de datos.</h3>";
     } else {
         $error = mysqli_error($mysqli);
         mysqli_stmt_close($stmt);
         return "Error al añadir el libro a la base de datos. Detalles: " . $error;
     }
 }
+
+function mostrarPrestamo($mysqli) {
+    // Sentencia SQL para seleccionar los préstamos activos de usuarios no borrados
+    $sql = "SELECT u.Nombre_Usuario, l.Titulo
+            FROM prestamo p
+            INNER JOIN usuarios u ON p.ID_Usuario = u.ID
+            INNER JOIN libros l ON p.ID_Libro = l.ID
+            WHERE l.Borrado = FALSE AND u.Borrado = FALSE";
+
+    $result = mysqli_query($mysqli, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        echo "<table class='tabla-prestamos'>";
+        echo "<tr><th>Nombre de Usuario</th><th>Título del Libro</th><th>Eliminar</th></tr>";
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr>";
+            echo "<td>" . $row["Nombre_Usuario"] . "</td>";
+            echo "<td>" . $row["Titulo"] . "</td>";
+            echo "<td><a href='?ruta=eliminarPrestamo&nombreUsuario=" . $row["Nombre_Usuario"] . "&tituloLibro=" . $row["Titulo"] . "' class='boton-eliminar'>Eliminar</a></td>";
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    } else {
+        echo "No hay préstamos activos en este momento.";
+    }
+}
+
+
+
+function eliminarPrestamo($mysqli, $nombreUsuario, $tituloLibro) {
+    // Sentencia SQL para eliminar el préstamo
+    $sql = "DELETE FROM prestamo 
+            WHERE ID_Usuario = (SELECT ID FROM usuarios WHERE Nombre_Usuario = '$nombreUsuario')
+            AND ID_Libro = (SELECT ID FROM libros WHERE Titulo = '$tituloLibro')";
+
+    $result = mysqli_query($mysqli, $sql);
+
+    if ($result) {
+        echo "<h3 class='resultado-prestamo'> El préstamo ha sido eliminado correctamente.</h3>";
+    } else {
+        echo "Error al eliminar el préstamo: " . mysqli_error($mysqli);
+    }
+}
+
+
 
 
 

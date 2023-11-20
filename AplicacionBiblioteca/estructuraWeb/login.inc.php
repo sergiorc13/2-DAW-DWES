@@ -10,24 +10,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["enviar"])) {
     $password = $_POST["password"];
 
     if (usuarioExiste($mysqli, $usuario)) {
-        // El usuario existe en la base de datos, verifica la contraseña
-
-        $sql = "SELECT Contrasena, Nombre, Apellido, Rol FROM usuarios WHERE Nombre_Usuario = ?";
+        // El usuario existe en la base de datos, verifica que no esté borrado
+    
+        $sql = "SELECT Contrasena, Nombre, Apellido, Rol FROM usuarios WHERE Nombre_Usuario = ? AND Borrado = FALSE";
         $stmt = mysqli_prepare($mysqli, $sql);
         mysqli_stmt_bind_param($stmt, "s", $usuario);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_bind_result($stmt, $hashedPassword, $nombre, $apellido, $rol);
         mysqli_stmt_fetch($stmt);
         mysqli_stmt_close($stmt);
-
+    
         if (password_verify($password, $hashedPassword)) {
-            // La contraseña es correcta, puedes permitir el acceso
+            // La contraseña es correcta y el usuario no está borrado, puedes permitir el acceso
             // Almacena los datos del usuario en la sesión
             session_start();
             $_SESSION["usuario"] = $usuario;
             $_SESSION["ROL"] = $rol;
-            
-
+    
             // Redirige a la página de perfil o realiza otras acciones
             header("Location: ?ruta=perfil");
             exit;
@@ -36,13 +35,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["enviar"])) {
             $mensajeError = "Contraseña incorrecta";
         }
     } else {
-        // El usuario no existe en la base de datos
-        $mensajeError = "El usuario no existe";
+        // El usuario no existe en la base de datos o está borrado
+        $mensajeError = "El usuario no existe o está borrado";
     }
 }
 
 mysqli_close($mysqli);
 ?>
+
 <section class="section-login">
     <link rel="stylesheet" href="css/estilos2.css">
     <form action="" method="post">
