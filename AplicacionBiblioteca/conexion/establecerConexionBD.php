@@ -12,7 +12,7 @@ if (!$mysqli) {
     echo "Fallo al conectar con la base de datos: " . mysqli_connect_error();
 } 
 
-// Realiza operaciones en la base de datos aquí
+
 function usuarioExiste($mysqli, $nombreUsuario) {
     $sql = "SELECT COUNT(*) as total FROM usuarios WHERE Nombre_Usuario = ? AND Borrado = FALSE";
 
@@ -25,6 +25,20 @@ function usuarioExiste($mysqli, $nombreUsuario) {
 
     return $total > 0;
 }
+
+function emailEnUso($mysqli, $email) {
+    $sql = "SELECT COUNT(*) as total FROM usuarios WHERE Correo_Electronico = ? AND Borrado = FALSE";
+
+    $stmt = mysqli_prepare($mysqli, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $total);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+
+    return $total > 0;
+}
+
 
 
 function registrarUsuario($mysqli, $nombre, $apellido, $apellido2, $correoElectronico, $nombreUsuario, $password) {
@@ -71,12 +85,12 @@ if (isset($_SESSION["usuario"])) {
 // Función para mostrar libros que no han sido borrados virtualmente
 function mostrarLibros($mysqli) {
     // Sentencia SQL para seleccionar todos los libros no borrados virtualmente de la base de datos
-    $sql = "SELECT ISBN, Titulo, Autor, Editorial, URL FROM libros WHERE Borrado = FALSE"; // Reemplaza "nombre_de_la_tabla" por el nombre real de tu tabla de libros
+    $sql = "SELECT ISBN, Titulo, Autor, Editorial, URL FROM libros WHERE Borrado = FALSE"; 
 
     $result = mysqli_query($mysqli, $sql);
 
     if (mysqli_num_rows($result) > 0) {
-        echo "<table class='libros-table'>"; // Agrega la clase 'libros-table' a la tabla
+        echo "<table class='libros-table'>"; 
         echo "<tr><th>ISBN</th><th>Título</th><th>Autor</th><th>Editorial</th><th>Portada</th><th>Más información</th></tr>";
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -561,8 +575,6 @@ function eliminarPrestamo($mysqli, $nombreUsuario, $tituloLibro) {
         echo "Error al eliminar el préstamo: " . mysqli_error($mysqli);
     }
 }
-
-
 
 
 

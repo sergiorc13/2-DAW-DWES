@@ -13,22 +13,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["registrar"])) {
     $usuario = $_POST["usuario"];
     $password = $_POST["password"];
 
-    // Verificar si el usuario ya existe
-    if (usuarioExiste($mysqli, $usuario)) {
-        $mensajeError = "El nombre de usuario ya está en uso. Por favor, elige otro.";
+    // Validar contraseña
+    if (strlen($password) < 8 || !preg_match("/\d/", $password)) {
+        $mensajeError = "La contraseña debe tener al menos 8 caracteres y contener al menos un número.";
     } else {
-        // Si el usuario no existe, intenta registrarlo
-        if (registrarUsuario($mysqli, $nombre, $apellido, $apellido2, $email, $usuario, $password)) {
-            // Usuario registrado con éxito
-            header("Location: ?ruta=login");
+        // Verificar si el usuario ya existe
+        if (usuarioExiste($mysqli, $usuario)) {
+            $mensajeError = "El nombre de usuario ya está en uso. Por favor, elige otro.";
+        } elseif (emailEnUso($mysqli, $email)) {
+            $mensajeError = "El correo electrónico ya está en uso. Por favor, utiliza otro.";
         } else {
-            $mensajeError = "Error al registrar el usuario.";
+            // Si el usuario no existe, el correo no está en uso y la contraseña es válida, intenta registrarlo
+            if (registrarUsuario($mysqli, $nombre, $apellido, $apellido2, $email, $usuario, $password)) {
+                // Usuario registrado con éxito
+                header("Location: ?ruta=login");
+            } else {
+                $mensajeError = "Error al registrar el usuario.";
+            }
         }
     }
 }
 
 mysqli_close($mysqli);
+
 ?>
+
 
 <section class="registro-section">
     <div class="titulo-div">
@@ -51,15 +60,21 @@ mysqli_close($mysqli);
         <label for = "usuario" class="label">Nombre de usuario:</label>
         <input type="text" name="usuario" class="input" required><br><br>
 
+        <br> <label for = "password" class="label">Contraseña:</label>
+        <input type="password" name="password" class="input" required><br><br>
+
         <?php if (!empty($mensajeError)): ?>
             <div class="mensaje-error">
                 <?php echo $mensajeError; ?>
             </div>
         <?php endif; ?>
 
-       <br> <label for = "password" class="label">Contraseña:</label>
-        <input type="password" name="password" class="input" required><br>
-
         <input type="submit" name="registrar" class="registrar-button" value="Registrarme">
     </form>
 </section>
+
+
+
+
+
+        

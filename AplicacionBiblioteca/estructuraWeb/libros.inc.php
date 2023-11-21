@@ -30,8 +30,6 @@ if(isset($_GET['ISBN'])) {
     </div>
 </div>
 
-
-
 <form method="post" action="?ruta=prestamo">
     <input type="hidden" name="ISBN" value="<?php echo $libro['ISBN']; ?>">
     <button type="submit" name="pedirBtn" class = "reservar">Pedir</button>
@@ -42,7 +40,6 @@ if(isset($_GET['ISBN'])) {
 
 // Cerrar la conexión a la base de datos al final de todas las operaciones
 mysqli_close($mysqli);
-
 
 ?>
 

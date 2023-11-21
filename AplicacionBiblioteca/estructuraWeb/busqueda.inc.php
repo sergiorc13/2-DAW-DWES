@@ -1,9 +1,8 @@
 
 <?php include_once "estructuraWeb/menu.inc.php";  ?>
 
-<div>
-    <br><br>
-<!-- Aquí se muestran los resultados de la búsqueda -->
+<div><br><br>
+
 <?php
 require_once("conexion/establecerConexionBD.php");
 
