@@ -1,7 +1,7 @@
 /* Estilos generales para el cuerpo de la página */
 body {
     font-family: Arial, sans-serif;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
     margin: 0;
     padding: 0;
 }
@@ -734,6 +734,7 @@ h2{
     font-family:'Times New Roman', Times, serif;
     font-size: 32px;
     color: #7a1e66;
+    text-align: center;
 }
 
 .formulario-añadir-libros {
@@ -764,4 +765,46 @@ h2{
 
 .formulario-añadir-libros input[type="submit"]:hover {
     background-color: #45a049;
+}
+
+
+/* Administracion prestamos */
+.tabla-prestamos {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 20px auto; /* Auto para centrar horizontalmente */
+    text-align: center;
+}
+
+.tabla-prestamos th, .tabla-prestamos td {
+    border: 1px solid #aeacac;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.tabla-prestamos th {
+    background-color: rgb(3, 38, 14);
+    color: white;
+}
+
+.tabla-prestamos tr {
+    background-color: #f2f2f2;
+}
+
+.boton-eliminar {
+    background-color: rgb(192, 66, 66);
+    color: white; /* Cambiado el color del texto para mejorar visibilidad */
+    padding: 10px 15px; /* Añadido un poco de relleno para mejorar la apariencia */
+    margin-top: 10px; /* Añadido margen superior */
+    text-decoration: none; /* Eliminada la subrayado por defecto en los enlaces */
+    display: inline-block; /* Alineación del botón en línea */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: transform 0.3s, border-radius 0.3s; /* Agregado efecto de transición */
+}
+
+.boton-eliminar:hover {
+    background-color: red;
+    transform: scale(1.1); /* Hace que el botón sea ligeramente más grande al pasar el ratón */
+    border-radius: 8px; /* Bordes más redondeados al pasar el ratón */
 }

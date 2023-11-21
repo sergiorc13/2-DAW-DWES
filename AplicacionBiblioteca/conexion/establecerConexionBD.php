@@ -206,7 +206,6 @@ function modificarNombreUsuario($mysqli, $nombreUsuarioActual, $nuevoNombreUsuar
 
 
 //Funcion para modificar la contraseña del usuario
-
 function cambiarContrasena($mysqli, $nombreUsuario, $contrasenaActual, $nuevaContrasena) {
     // Verificar si la contraseña actual es correcta
     $sql = "SELECT Contrasena FROM usuarios WHERE Nombre_Usuario = ?";
@@ -463,6 +462,7 @@ function borrarUsuario($mysqli, $idUsuario) {
 
     mysqli_stmt_close($stmt);
 }
+
 
 function modificarLibros($mysqli) {
     // Sentencia SQL para seleccionar todos los libros no borrados virtualmente de la base de datos

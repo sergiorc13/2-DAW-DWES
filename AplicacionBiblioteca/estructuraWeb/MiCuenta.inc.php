@@ -90,4 +90,3 @@ mysqli_close($mysqli);
     </div>
 </div>
 
-<?php // include_once "pie.inc.php"; ?>
