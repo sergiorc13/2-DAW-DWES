@@ -22,7 +22,6 @@ if(isset($_GET["articulos"])){
             }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -59,6 +58,5 @@ if(isset($_GET["articulos"])){
     }else{
         echo "<p>No has seleccionado ningún producto</p>";
     } ?>
-    
 </body>
 </html>
