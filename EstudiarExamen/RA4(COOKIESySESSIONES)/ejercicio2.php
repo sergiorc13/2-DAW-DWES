@@ -13,8 +13,6 @@ if(isset($_POST["nombre"]) && isset($_POST["colorFondo"]) && isset($_POST["color
         echo "<body style='background-color: " . $_SESSION["colorFondo"] . "; color: " . $_SESSION["colorLetra"] . "; font-family: " . $_SESSION["tipoLetra"] . ";'>";
     } 
 } 
-    
-
 ?>
 
 <!DOCTYPE html>
@@ -41,8 +39,6 @@ if(isset($_POST["nombre"]) && isset($_POST["colorFondo"]) && isset($_POST["color
         </select><br><br>
 
         <input type="submit" value="Aceptar">
-
     </form>
-    
 </body>
 </html>

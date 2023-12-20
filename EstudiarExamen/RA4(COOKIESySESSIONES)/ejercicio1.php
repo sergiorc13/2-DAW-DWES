@@ -27,7 +27,6 @@ if (isset($_POST["nombre"]) && isset($_POST["colorFondo"]) && isset($_POST["colo
         echo "<h1>Introduce tus preferencias</h1>";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -54,8 +53,6 @@ if (isset($_POST["nombre"]) && isset($_POST["colorFondo"]) && isset($_POST["colo
         </select><br><br>
 
         <input type="submit" value="Aceptar">
-
-    </form>
-    
+    </form> 
 </body>
 </html>

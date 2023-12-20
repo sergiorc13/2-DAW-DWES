@@ -1,5 +1,4 @@
 <?php
-
 /*
 Crear una página PHP llamada Ejercicio03-retringida.php, bastará con que simplemente muestre el mensaje Zona restringida. 
 Dicha página no se podrá ver por parte de ningún usuario que no se haya autentificado en la página Ejercicio03-autentificacion.php, 
@@ -13,7 +12,6 @@ Tras habernos autentificado, durante la sesión podremos acceder directamente a 
 Nota. Se pueden utilizar cookies o sesiones, pero la contraseña se deberá almacenar 
 cifrada para una mayor seguridad, especialmente si se utilizan cookies.
  */
-
  
 session_start();
 

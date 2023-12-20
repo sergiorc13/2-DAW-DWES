@@ -13,9 +13,6 @@ if(!isset($_SESSION['autenticado']) &&  (!$_SESSION['autenticado'])){
         exit;
     }
 }
-
-
-
 ?>
 
 <!DOCTYPE html>
